@@ -4,9 +4,12 @@
 //const connection = require('./db-config');
 const express = require('express');
 const app = express();
-const { setUpRoutes } = require('./routes/index');// I havent created this quite yet;
+const { setUpRoutes, setUpNumber,postingTheMovie } = require('./routes/index');
 
-setUpRoutes(app); 
+setUpRoutes(app);
+setUpNumber(app);
+postingTheMovie(app);
+
 
 
 // const connection = require('./db-config');
@@ -25,6 +28,8 @@ const port = process.env.PORT || 3000;
 // });
 
 app.use(express.json());
+
+////THIS IS THE ROUTE FROM THE EXERCISE!!
 
 // app.get('/api/movies', (req, res) => {
 //   let sql = 'SELECT * FROM movies';
@@ -51,6 +56,9 @@ app.use(express.json());
 //       res.status(500).send('Error retrieving movies from database');
 //     });
 // });
+
+
+/////NOW GOTTA DO THE ID ONE!!
 
 // app.get('/api/movies/:id', (req, res) => {
 //   const movieId = req.params.id;
@@ -99,6 +107,9 @@ app.use(express.json());
 //     }
 //   );
 // });
+
+
+///THIS ONE IS THE SECOND ONE I AM GONNA DO MYSELF!!:
 
 // app.post('/api/movies', (req, res) => {
 //   const { title, director, year, color, duration } = req.body;
