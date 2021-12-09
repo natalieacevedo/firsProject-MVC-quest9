@@ -2,15 +2,6 @@ const express = require('express');
 const moviesRouter = require('express').Router();
 moviesRouter.use(express.json());
 const Joi = require('joi');
-//I think this is redundant, I am gonna do it like this and then refactor/////////////////
-const moviesNumber = require('express').Router();
-moviesNumber.use(express.json());
-///////////////////////////////////////////////////////////////
-
-//////being redundant again out of ignorance:////////////////////////////
-const postingMovies = require('express').Router();
-postingMovies.use(express.json());
-///////////////////////////////////////////////////////////////
 
 const movie = require('../models/moviemodel');
 
@@ -30,7 +21,7 @@ moviesRouter.get('/', (req, res) => {
 
 //NOW THE ROUTE THAT GETS THE MOVIE NUMBER
 
-moviesNumber.get('/:id', (req, res) => {
+moviesRouter.get('/:id', (req, res) => {
     const movieId = req.params.id;
     movie.getThatMovie(movieId)
         .then((movie) => { res.json(movie) })
@@ -41,8 +32,8 @@ moviesNumber.get('/:id', (req, res) => {
         })
 });
    
-
-postingMovies.post('/', (req, res) => {
+//route that post new movie
+moviesRouter.post('/', (req, res) => {
     
     const { title, director, year, color, duration } = req.body;
 
@@ -63,7 +54,7 @@ postingMovies.post('/', (req, res) => {
     else {
         console.log(req.body);
       // console.log(res.body);
-        movie.postThatMovie({ title, director, year, color, duration })
+        movie.postThatMovie( title, director, year, color, duration )
         .then((novaMovie) => {
             console.log(novaMovie[0].insertId);
         let id = novaMovie[0].insertId;// dont know how to see results
@@ -84,11 +75,52 @@ postingMovies.post('/', (req, res) => {
 
 })
 
+//ROUTE THAT ALTERS MOVIE(PUT);
+
+moviesRouter.put('/:id', (req, res) => {
+    
+    
+    const id = req.params.id;
+    const body = req.body;
+
+    console.log(movie.alterMovie(body, id))
+
+   const validationErrors  = Joi.object({
+                title: Joi.string().max(255),
+                director: Joi.string().max(255),
+                year: Joi.number().integer().min(1888),
+                color: Joi.boolean(),
+                duration: Joi.number().integer().min(1),
+              }).validate(req.body, { abortEarly: false }).error;
+              
+    if (validationErrors) {
+        return Promise.reject('INVALID_DATA')
+    
+    } else {
+        if (movie.alterMovie(body, id) === 'RECORD_NOT_FOUND') {
+            res.status(404).send(`Movie with id ${id} not found.`);
+       
+        } else {
+            movie.alterMovie(body, id)
+                .then(result => {
+                res.status(200).json({ ...result, ...req.body });
+            })
+        }
+    }
+
+})
+
+
+
+
+
+
+
+
 //module.exports = moviesRouter;
 
 module.exports = {
     moviesRouter,
-    moviesNumber,
-    postingMovies
+   
 
 }

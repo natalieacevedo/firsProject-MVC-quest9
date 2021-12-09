@@ -52,7 +52,7 @@ function getThatMovie(id) {
 
 //NOW THE POST..QUE MIEDO..LET'S SEE IF I CAN DO IT:
 
- async function postThatMovie({ title, director, year, color, duration }) {
+ async function postThatMovie(title, director, year, color, duration ) {
     
     try {
         const results = await db.query('insert into movies (title, director, year, color, duration) values(?, ?, ?, ?, ?)', [title, director, year, color, duration]);
@@ -67,11 +67,34 @@ function getThatMovie(id) {
    
 };
 
+//NOW THE PUT:
+
+async function alterMovie(requestbody,id) {
+    console.log(id);
+    try {
+        const results = await db.query('select * from movies where id = ?', [id]);
+        if (results[0]) {
+            console.log(results);
+          return  db.query('UPDATE movies SET ? WHERE id = ? ', [requestbody, id]);
+
+        }
+        
+    } catch(error) {
+        console.log(error);
+        return error
+        
+     }
+}
+
+
+
+
 
 
 module.exports = {
 
     findMany,
     getThatMovie,
-    postThatMovie
+    postThatMovie,
+    alterMovie
 }

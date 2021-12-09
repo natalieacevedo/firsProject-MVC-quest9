@@ -4,20 +4,16 @@
 //const connection = require('./db-config');
 const express = require('express');
 const app = express();
-const { setUpRoutes, setUpNumber,postingTheMovie } = require('./routes/index');
-
+const { setUpRoutes } = require('./routes/index');
+app.use(express.json());
 setUpRoutes(app);
-setUpNumber(app);
-postingTheMovie(app);
-
-
-
+const port = process.env.PORT || 3000;
 // const connection = require('./db-config');
 // const express = require('express');
 // const app = express();
 // const Joi = require('joi');
 
-const port = process.env.PORT || 3000;
+
 
 // connection.connect((err) => {
 //   if (err) {
@@ -27,7 +23,7 @@ const port = process.env.PORT || 3000;
 //   }
 // });
 
-app.use(express.json());
+
 
 ////THIS IS THE ROUTE FROM THE EXERCISE!!
 

@@ -1,18 +1,13 @@
-const moviesRouter = require('./moviesroutes');
+const movies = require('./moviesroutes');
 
 
 const setUpRoutes = (app) => {
 
-    app.use('/api/movies', moviesRouter.moviesRouter);
+    app.use('/api/movies', movies.moviesRouter);
+    
+
 };
 
-const setUpNumber = (app) => {
-    app.use('/api/movies', moviesRouter.moviesNumber)
-};
-
-const postingTheMovie = (app) => {
-    app.use('/api/movies',moviesRouter.postingMovies )
-}
 
 
-module.exports = { setUpRoutes, setUpNumber, postingTheMovie};
+module.exports = { setUpRoutes };
